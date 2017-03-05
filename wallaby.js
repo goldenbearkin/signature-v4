@@ -1,7 +1,9 @@
 module.exports = wallaby => ({
   files: [
     'lib/**/*.ts',
-    { pattern: 'node_modules/chai/chai.js', instrument: false },
+    'test/aws4_testsuite/**/*'
+    // { pattern: 'node_modules/chai/chai.js', instrument: false },
+    // { pattern: 'node_modules/sinon/pkg/sinon.js', instrument: false },
     // { pattern: 'src/**/*.js', instrument: true, load: true, ignore: false }
   ],
 
@@ -14,7 +16,8 @@ module.exports = wallaby => ({
   },
 
   setup: function () {
-    global.expect = require('chai').expect;
+    // global.expect = require('chai').expect;
+    // global.fixtures = wallaby.localProjectDir;
   },
 
   testFramework: {

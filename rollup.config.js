@@ -1,8 +1,9 @@
 export default {
   format: 'umd',
-  moduleName: 'sig-v4',
+  moduleName: 'signature-v4',
   external: [
     // put some third party libraries here
+    'crypto-js'
   ],
   onwarn: ( warning ) => {
       const skip_codes = [
