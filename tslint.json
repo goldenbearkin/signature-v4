@@ -5,6 +5,11 @@
             true,
             "single",
             "avoid-escape"
-        ]
+        ],
+        "interface-over-type-literal": false,
+        "object-literal-sort-keys": false,
+        "member-access": false,
+        "arrow-parens": false,
+        "max-line-length": [true, 150]
     }
 }
