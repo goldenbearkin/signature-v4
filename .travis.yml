@@ -1,19 +1,21 @@
 language: node_js
 node_js: stable
-
 sudo: false
-
 install: true
-
 os:
-  - linux
-
+- linux
 before_script:
-  - npm install
-  - npm install -g coveralls nyc
-
+- npm install
+- npm install -g coveralls nyc
 script:
-  - npm run test && npm run lint
-
+- npm run test && npm run lint
 after_success:
-  - nyc report --reporter=text-lcov | coveralls
+- nyc report --reporter=text-lcov | coveralls
+deploy:
+  provider: npm
+  email: huihangkin@gmail.com
+  api_key:
+    secure: mHKQ0VEL5yhHUNRHlIsKRnSrT60s0+mGtVeMROmxHx0ypHSx+JAXHq+8ye9k5CB4lSrGdYGPzQgNR0ae2SygsTz3/Do4pKYrXC5h8wcIiUmOBI1j0pIAV5FWqZIy7jgMhKXpsnfaDxDzRjllx1glZzw6XslC7Ca8BTSRUWrS2tQY9jkeeTLZ0Aw3AgV7XFxLJI491Rq51QdxQVvCiDilP19rsX/yllCdTeIHIT19PdHjQdA4jj5k67WDabGLqwLyzf//ohT29VFQwiqtObOXomK5/y/MUo2lCTcWXjOiro2KeA6+7Oi8LudT3bW+Lrm41mkjJqjYyFnOGv1wFeOb+E4ojVgeggUMFn1W+QpB1qgHtk2SHTjqodhP5t0OeJ9N9aNPtaAC7KL8qCKeyWAqX3PlADrgUQyVgbgy4WtP4QLF04ZSgUYaoulO7okbSfLe+29sSqO7/in7nPu9h24uBkPcXt1tdCsaQGlbLdPouOXzDxhz10ZRRORahKE4JGZbr4RTorcfX6R5VcHDh2UMTBt68aXLiRTZ9ANpB4v+L5l/IO9EAM+tU4JLIId9717WFvNqXrUlEQO0GFncaQplfhxRxvgiZKUDBbzKalBjFWEsncdsOZ5NSr60WHZxKjyqs6aPukMKBvyKTnH2D0ACSL+ifHgkRBp54z3GT4pIc10=
+  on:
+    tags: true
+    repo: goldenbearkin/signature-v4
