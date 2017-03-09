@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { readFileSync } from 'fs';
+import { RequestT, SignatureV4 } from '../lib';
 import { Headers } from '../lib/headers';
 import * as Helper from '../lib/helper';
-import { RequestT, SignatureV4 } from '../lib/signature-v4';
 
 type TestConfigT = {
     authz: string;
@@ -67,37 +67,6 @@ function parser(req: string): { method: string, protocol: string, host: string, 
     return { method, protocol, host, path, headers, payload };
 }
 
-function stringifier(request: RequestT, xAmzDate: string): string {
-    const reqs: string[] = [];
-
-    const {host, path} = Helper.urlDecomposition(request.url);
-
-    reqs.push(`${request.method} ${path} HTTP/1.1`);
-
-    request.headers.forEach((values, name) => {
-
-        const lowerCaseName = name.toLowerCase();
-
-        if (lowerCaseName === 'host' || lowerCaseName === 'x-amz-date') {
-            // no-op
-        } else {
-            const flatten = values.join(',');
-            reqs.push(`${name}:${flatten}`);
-        }
-    });
-
-    reqs.push(`Host:${host}`);
-
-    reqs.push(`X-Amz-Date:${xAmzDate}`);
-
-    if (this.request.method !== 'GET') {
-        reqs.push('');
-        reqs.push(this.request.payload);
-    }
-
-    return reqs.join('\n');
-}
-
 describe('AWS test suite (General cases)', () => {
     const testCases = [
         `${__dirname}/aws4_testsuite/get-header-key-duplicate`,
@@ -135,7 +104,7 @@ describe('AWS test suite (General cases)', () => {
 
     testCases.forEach(testCasePath => {
         const { authz, creq, req, sreq, sts } = configTest(testCasePath);
-        const { method, protocol, host, path, headers, payload} = parser(req);
+        const { method, protocol, host, path, headers, payload } = parser(req);
 
         let request: RequestT;
         if (method === 'GET') {
@@ -196,4 +165,40 @@ describe('AWS test suite (General cases)', () => {
             });
         });
     });
+});
+
+describe('Helper functions:', () => {
+    describe('getXAmzDate', () => {
+        const date = new Date(Date.UTC(2015, 7, 30, 12, 36));
+        it(`should able to return the date in string format 'YYYYMMDDTHHMMSSZ'`, () => {
+            expect(Helper.getXAmzDate(date)).equal('20150830T123600Z');
+        });
+    });
+
+    describe('urlDecomposition', () => {
+        const date = new Date(Date.UTC(2015, 7, 30, 12, 36));
+        it(`should able to decompose the given URL`, () => {
+            const { protocol, host, path, pathname, query } = Helper.urlDecomposition('http://www.example.com/path1/path2?a=b&c=d');
+            expect(protocol).equal('http');
+            expect(host).equal('www.example.com');
+            expect(path).equal('/path1/path2?a=b&c=d');
+            expect(pathname).equal('/path1/path2');
+            expect(query).equal('a=b&c=d');
+        });
+
+        it('should throw Error if the input URL is invalid', () => {
+            const fn = () => {
+                const { protocol, host, path, pathname, query } = Helper.urlDecomposition('http:/www.example.com/path1/path2?a=b&c=d');
+            };
+
+            expect(fn).to.throw(Error);
+        });
+    });
+
+    describe('fixedEncodeURIComponent', () => {
+        it(`more stringent in adhering to RFC 3986 (which reserves !, ', (, ), and *)`, () => {
+            expect(Helper.fixedEncodeURIComponent(`!'()*`)).equal('%21%27%28%29%2a');
+        });
+    });
+
 });

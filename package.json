@@ -1,26 +1,28 @@
 {
   "name": "signature-v4",
-  "version": "1.0.0",
+  "version": "0.0.0-semantically-released",
   "description": "AWS Signature Version 4",
   "main": "signature-v4.bundle.js",
-  "jsnext:main": "signature-v4.js",
-  "module": "signature-v4.js",
-  "types": "signature-v4.d.ts",
+  "jsnext:main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "nyc --exclude lib/headers.ts --include lib/**/*.ts --extension .ts --require ts-node/register mocha test/**/*.spec.ts && shx rm -rf ./coverage",
     "test:watch": "mocha -w --compilers ts:ts-node/register test/**/*.spec.ts",
-    "build": "rimraf dist && tsc -p tsconfig-esm.json && rollup -c rollup.config.js dist/signature-v4.js > dist/signature-v4.bundle.js && cp package.json dist && ts-node tools/cleanup.ts && cp README.md dist",
-    "lint": "tslint -c tslint.json lib/**/*.ts test/**/*.ts"
+    "build": "rimraf dist && tsc -p tsconfig-esm.json && rollup -c rollup.config.js dist/index.js > dist/signature-v4.bundle.js && cp package.json dist && ts-node tools/cleanup.ts && cp README.md dist",
+    "lint": "tslint -c tslint.json lib/**/*.ts test/**/*.ts",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/goldenbearkin/signature-v4.git"
+    "url": "https://github.com/goldenbearkin/signature-v4.git"
   },
   "keywords": [
     "AWS",
     "Signature Version 4"
   ],
-  "author": "Jason Hui <huihangkin@gmail.com>",
+  "author": "goldenbearkin <huihangkin@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/goldenbearkin/signature-v4/issues"
@@ -31,17 +33,23 @@
     "@types/crypto-js": "^3.1.33",
     "@types/mocha": "^2.2.39",
     "@types/node": "^7.0.5",
-    "@types/sinon": "^1.16.35",
     "chai": "^3.5.0",
+    "commitizen": "^2.9.6",
+    "cz-conventional-changelog": "^2.0.0",
     "mocha": "^3.2.0",
     "nyc": "^10.1.2",
     "rimraf": "^2.6.0",
     "rollup": "^0.41.4",
     "shx": "^0.2.2",
-    "sinon": "^1.17.7",
     "ts-node": "^2.1.0",
     "tslint": "^4.4.2",
-    "typescript": "^2.1.6"
+    "typescript": "^2.1.6",
+    "semantic-release": "^6.3.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1"

@@ -21,6 +21,6 @@
     ]
   },
   "files": [
-    "./lib/signature-v4.ts"
+    "./lib/index.ts"
   ]
 }
