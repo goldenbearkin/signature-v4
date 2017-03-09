@@ -12,7 +12,7 @@
     "build": "rimraf dist && tsc -p tsconfig-esm.json && rollup -c rollup.config.js dist/index.js > dist/signature-v4.bundle.js && cp package.json dist && ts-node tools/cleanup.ts && cp README.md dist",
     "lint": "tslint -c tslint.json lib/**/*.ts test/**/*.ts",
     "commit": "git-cz",
-    "semantic-release": "semantic-release pre && yarn build && yarn publish && semantic-release post"
+    "semantic-release": "semantic-release pre && yarn build && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
